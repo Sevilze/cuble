@@ -6,22 +6,15 @@ export default class Graph {
     }
 
     update(stats) {
-        // Start graph from lowest guesses
+        // Always show all score categories (1-6+)
         let start = 0;
-        while (stats[start] === 0) {
-            start++;
-            // Start from 15 no matter what
-            if (start === 15) {
-                break;
-            }
-        }
         // Find score with highest frequency
         let max = 0;
         for (let i = start; i < stats.length; i++) {
             max = Math.max(max, stats[i]);
         }
         this.canvas.width = this.canvas.offsetWidth * window.devicePixelRatio;
-        this.canvas.height = Graph.THICKNESS * (stats.length - start) * window.devicePixelRatio;
+        this.canvas.height = Graph.THICKNESS * stats.length * window.devicePixelRatio;
         this.canvas.getContext('2d').scale(window.devicePixelRatio, window.devicePixelRatio);
         const ctx = this.canvas.getContext('2d');
         // Render graph
@@ -34,7 +27,7 @@ export default class Graph {
             ctx.font = 'larger Rubik';
             let y = 0;
             for (let i = start; i < stats.length; i++) {
-                ctx.fillText(i === stats.length - 1 ? `>${stats.length - 2}` : i, 0, y + 25);
+                ctx.fillText(i === stats.length - 1 ? '6+' : (i + 1), 0, y + 25);
                 let value = stats[i] / max * (this.canvas.offsetWidth - Graph.THICKNESS);
                 if (isNaN(value) || value < Graph.THICKNESS) {
                     value = Graph.THICKNESS;

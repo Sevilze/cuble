@@ -26,22 +26,28 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Rubik&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="./styles.css">
+    <script src="https://unpkg.com/feather-icons"></script>
 </head>
 
 <body>
-    <button id="open-stats">📊</button>
+    <div id="mode-indicator">
+        <span id="mode-text"></span>
+        <button id="mode-toggle"></button>
+        <button id="new-game" style="display: none;">New Game</button>
+    </div>
+    <button id="open-stats" class="icon-button" aria-label="Statistics"><i data-feather="bar-chart-2"></i></button>
     <div id="stats-container" class="container" style="display: none">
         <div id="stats-modal" class="modal">
             <h1>STATISTICS</h1>
             <canvas id="graph"></canvas>
-            <p>
+            <p id="countdown-timer">
                 <span>NEXT CUBLE IN: </span>
                 <span id="hours"></span>:<span id="minutes"></span>:<span id="seconds"></span>
             </p>
             <button id="close-stats" class="ok">OK</button>
         </div>
     </div>
-    <button id="open-tutorial">ℹ️</button>
+    <button id="open-tutorial" class="icon-button" aria-label="How to Play"><i data-feather="info"></i></button>
     <div id="tutorial-container" class="container" style="display: none">
         <div id="tutorial-modal" class="modal">
             <h1>HOW TO PLAY</h1>
@@ -112,12 +118,20 @@
         </div>
     </div>
     <canvas id="feedback"></canvas>
+    <div id="statistics-display">
+        <div id="solved-pieces"></div>
+        <div id="solved-stickers"></div>
+    </div>
     <h2 id="parity"></h2>
     <div id="picker"></div>
     <div id="actions">
-        <button id="erase" class="action" disabled>❌</button>
-        <button id="rotate" class="action" disabled>🔄</button>
-        <button id="guess" class="action">✅</button>
+        <button id="erase" class="action" disabled aria-label="Erase"><i data-feather="x"></i></button>
+        <button id="rotate" class="action" disabled aria-label="Rotate"><i data-feather="refresh-cw"></i></button>
+
+        <button id="guess" class="action" aria-label="Submit">
+            <span id="guess-label" class="action-label">0</span>
+            <i data-feather="check"></i>
+        </button>
     </div>
     <canvas id="confetti"></canvas>
     <script type="module" src="/main.js"></script>
