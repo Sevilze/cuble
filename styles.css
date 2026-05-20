@@ -47,6 +47,9 @@ body {
 }
 
 #puzzle-select {
+  position: fixed;
+  top: calc(var(--hud-height) - 58px);
+  right: 96px;
   background-color: #333;
   color: white;
   border: 1px solid #555;
@@ -54,6 +57,7 @@ body {
   padding: 4px 8px;
   font-size: 12px;
   font-family: "Rubik", sans-serif;
+  z-index: 1000;
 }
 
 #mode-toggle:hover,
@@ -279,9 +283,13 @@ button:disabled {
     --hud-height: 72px;
   }
   #mode-indicator {
-    max-width: calc(70%);
+    max-width: calc(100% - 280px);
     font-size: 12px;
     gap: 8px;
+    align-items: flex-start;
+  }
+  #mode-text {
+    flex: 1 0 100%;
   }
   #top-hud {
     flex-direction: column;
@@ -290,8 +298,8 @@ button:disabled {
   #feedback {
     width: 250px;
     left: 50%;
-    transform: translateX(-35%);
-    top: calc(var(--hud-height) - 10px);
+    transform: translateX(-40%);
+    top: calc(var(--hud-height) - 50px);
   }
   #statistics-display {
     font-size: 12px;

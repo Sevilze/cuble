@@ -61,6 +61,7 @@ let model;
 let cube;
 let answerAssignments;
 let answerColors;
+let submittedAssignments;
 let guesses;
 let score;
 let stats;
@@ -245,7 +246,35 @@ async function withSeededRandomness(seedHex, callback) {
     }
 }
 
+function fallbackDigestHex(value) {
+    const seeds = [
+        0x811c9dc5,
+        0x9e3779b9,
+        0x85ebca6b,
+        0xc2b2ae35,
+        0x27d4eb2f,
+        0x165667b1,
+        0xd3a2646c,
+        0xfd7046c5,
+    ];
+
+    return seeds.map((seed, seedIndex) => {
+        let hash = seed >>> 0;
+        for (let index = 0; index < value.length; index++) {
+            hash ^= value.charCodeAt(index);
+            hash = Math.imul(hash, 16777619) >>> 0;
+            hash ^= (seedIndex + 1) * 0x9e3779b9;
+            hash = Math.imul(hash ^ (hash >>> 16), 0x85ebca6b) >>> 0;
+        }
+        return hash.toString(16).padStart(8, '0');
+    }).join('');
+}
+
 async function digestHex(value) {
+    if (!globalThis.crypto?.subtle) {
+        return fallbackDigestHex(value);
+    }
+
     const bytes = new TextEncoder().encode(value);
     const digest = await crypto.subtle.digest('SHA-256', bytes);
     return Array.from(new Uint8Array(digest), (byte) => byte.toString(16).padStart(2, '0')).join('');
@@ -701,8 +730,8 @@ function updateCubeStatus() {
 window.updateCubeStatus = updateCubeStatus;
 
 function updateScoreDisplay() {
-    if (!cube) return;
-    const assignments = cube.getAssignments();
+    const assignments = submittedAssignments;
+    if (!assignments) return;
     const facelets = assignmentsToFacelets(model, assignments);
     const solvedPieces = countSolvedPieces(
         { ...model, slots: model.slots.filter((slot) => slot.editable) },
@@ -802,6 +831,7 @@ function check() {
     localStorage.setItem(getStorageKey('guesses'), guesses++);
     document.getElementById('guess-label').textContent = String(guesses);
     cube.save();
+    submittedAssignments = { ...assignments };
 
     const currentColors = assignmentsToFacelets(model, assignments);
     feedback.drawCube(currentColors, answerColors, config.size);
@@ -847,6 +877,7 @@ async function init() {
         }
         cube.save();
     }
+    submittedAssignments = { ...cube.getAssignments() };
 
     guesses = parseInt(localStorage.getItem(getStorageKey('guesses')), 10);
     if (Number.isNaN(guesses)) guesses = -1;
