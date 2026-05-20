@@ -32,6 +32,11 @@
 <body>
     <div id="mode-indicator">
         <span id="mode-text"></span>
+        <select id="puzzle-select" aria-label="Puzzle Size">
+            <option value="333">3x3x3</option>
+            <option value="444">4x4x4</option>
+            <option value="555">5x5x5</option>
+        </select>
         <button id="mode-toggle"></button>
         <button id="new-game" style="display: none;">New Game</button>
     </div>
@@ -47,13 +52,21 @@
             <button id="close-stats" class="ok">OK</button>
         </div>
     </div>
+    <div id="scramble-container" class="container" style="display: none">
+        <div id="scramble-modal" class="modal">
+            <h1>SCRAMBLE</h1>
+            <p>This is the sequence used to generate the current target cube.</p>
+            <p id="scramble-sequence"></p>
+            <button id="close-scramble" class="ok">OK</button>
+        </div>
+    </div>
     <button id="open-tutorial" class="icon-button" aria-label="How to Play"><i data-feather="info"></i></button>
     <div id="tutorial-container" class="container" style="display: none">
         <div id="tutorial-modal" class="modal">
             <h1>HOW TO PLAY</h1>
             <p>Guess the CUBLE in as few tries as you can.</p>
-            <p>Each guess must be a solvable cube. Status indicators for corner/edge orientation parity and permutation
-                parity are provided for your convenience.</p>
+            <p>Choose between 3x3x3, 4x4x4, and 5x5x5 from the selector in the top-left corner.</p>
+            <p>Each guess must use the correct number of each piece type. The status line also tracks EP, CP, and PP for the current puzzle.</p>
             <p>Click or tap on a piece to select it. Hit ❌ to erase a piece, 🔄 to flip an edge or twist a corner, and ✅
                 to submit.</p>
             <p>After each guess, a 2D projection will tell you how close your guess was to the actual scramble.
@@ -84,13 +97,11 @@
             <p>The game saves automatically after each guess and locks pieces that are correctly permuted and oriented
                 in place, so you don't have to worry about accidentally messing up your progress.</p>
             <p>The numbers after the guess in the results you can copy to share after winning represent how many guesses
-                it took to get the corresponding piece in the following list correct:</p>
-            <p>UF UR UB UL DF DR DB DL FR FL BR BL UFR URB UBL ULF DRF DFL DLB DBR</p>
+                it took to get each editable piece slot correct for the current puzzle.</p>
             <hr>
             <h2>Fixing an Unsolvable Cube</h2>
-            <p>Much like how WORDLE requires guesses to be valid words, CUBLE requires guesses to be solvable scrambles.
-                A cube is solvable when corner orientation parity (CP), edge orientation parity (EP), and permutation
-                parity (PP) are all zero.</p>
+            <p>Much like how WORDLE requires guesses to be valid words, CUBLE requires guesses to use a valid piece inventory.
+                The status line shows EP, CP, and PP for the current puzzle state.</p>
             <p>To ensure the cube always stays in a solvable state, try to limit yourself to the following actions:</p>
             <ul>
                 <li>Flipping two edges</li>
