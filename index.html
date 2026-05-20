@@ -27,19 +27,14 @@
     <link href="https://fonts.googleapis.com/css2?family=Rubik&display=swap" rel="stylesheet">
     
     <script src="https://unpkg.com/feather-icons"></script>
-  <script type="module" crossorigin src="/cuble/assets/index.e1291b35.js"></script>
+  <script type="module" crossorigin src="/cuble/assets/index.078d6b8a.js"></script>
   <link rel="modulepreload" href="/cuble/assets/vendor.f43d3099.js">
-  <link rel="stylesheet" href="/cuble/assets/index.be577b04.css">
+  <link rel="stylesheet" href="/cuble/assets/index.6278f36e.css">
 <link rel="manifest" href="/cuble/manifest.webmanifest"></head>
 
 <body>
     <div id="mode-indicator">
         <span id="mode-text"></span>
-        <select id="puzzle-select" aria-label="Puzzle Size">
-            <option value="333">3x3x3</option>
-            <option value="444">4x4x4</option>
-            <option value="555">5x5x5</option>
-        </select>
         <button id="mode-toggle"></button>
         <button id="new-game" style="display: none;">New Game</button>
     </div>
@@ -63,6 +58,11 @@
             <button id="close-scramble" class="ok">OK</button>
         </div>
     </div>
+    <select id="puzzle-select" aria-label="Puzzle Size">
+        <option value="333">3x3x3</option>
+        <option value="444">4x4x4</option>
+        <option value="555">5x5x5</option>
+    </select>
     <button id="open-tutorial" class="icon-button" aria-label="How to Play"><i data-feather="info"></i></button>
     <div id="tutorial-container" class="container" style="display: none">
         <div id="tutorial-modal" class="modal">
