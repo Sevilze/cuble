@@ -88,11 +88,9 @@ export default class Cube2D {
         const feedback = [];
 
         for (let face = 0; face < 6; face++) {
-            const available = {
-                corner: { U: 0, L: 0, F: 0, R: 0, B: 0, D: 0 },
-                edge: { U: 0, L: 0, F: 0, R: 0, B: 0, D: 0 },
-                center: { U: 0, L: 0, F: 0, R: 0, B: 0, D: 0 },
-            };
+            const available = Object.fromEntries(
+                Cube2D.getFaceletGroups(dimension).map((type) => [type, Cube2D.createColorCounts()])
+            );
 
             for (let index = 0; index < perFace; index++) {
                 const faceletIndex = face * perFace + index;
@@ -116,17 +114,44 @@ export default class Cube2D {
         return feedback;
     }
 
+    static getFaceletGroups(dimension) {
+        if (dimension === 5) {
+            return ['corner', 'edgeWing', 'edgeMiddle', 'center', 'centerX', 'centerT'];
+        }
+
+        return ['corner', 'edge', 'center'];
+    }
+
+    static createColorCounts() {
+        return { U: 0, L: 0, F: 0, R: 0, B: 0, D: 0 };
+    }
+
     static getFaceletType(index, dimension) {
         const row = Math.floor(index / dimension);
         const col = index % dimension;
         const last = dimension - 1;
+        const middle = Math.floor(dimension / 2);
 
         if ((row === 0 || row === last) && (col === 0 || col === last)) {
             return 'corner';
         }
+
+        if (dimension === 5) {
+            if (row === 0 || row === last || col === 0 || col === last) {
+                return row === middle || col === middle ? 'edgeMiddle' : 'edgeWing';
+            }
+
+            if (row === middle && col === middle) {
+                return 'center';
+            }
+
+            return row === middle || col === middle ? 'centerT' : 'centerX';
+        }
+
         if (row === 0 || row === last || col === 0 || col === last) {
             return 'edge';
         }
+
         return 'center';
     }
 }

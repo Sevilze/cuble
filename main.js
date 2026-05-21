@@ -646,6 +646,15 @@ function allEditableSlotsFilled(assignments) {
         });
 }
 
+function allGroupSlotsFilled(assignments, group) {
+    return model.slots
+        .filter((slot) => slot.editable && slot.group === group)
+        .every((slot) => {
+            const colors = assignments[slot.id];
+            return colors && !colors.includes('X');
+        });
+}
+
 function formatStatusSummary(summary) {
     return `EP: ${summary.ep}, CP: ${summary.cp}, PP: ${summary.pp}`;
 }
@@ -671,7 +680,8 @@ function validateCurrentAssignments(assignments) {
             }
         }
     } else {
-        const wingMetrics = getOrbitOrientationMetrics(assignments, 'edgeWing');
+        const wingsFilled = allGroupSlotsFilled(assignments, 'edgeWing');
+        const wingMetrics = wingsFilled ? getOrbitOrientationMetrics(assignments, 'edgeWing') : null;
         ep = wingMetrics?.ep ?? 'N/A';
 
         if (currentPuzzleId === '444') {
@@ -682,10 +692,8 @@ function validateCurrentAssignments(assignments) {
             const slotByLabel = buildSlotLookup('edgeMiddle');
             const middleEdgeAssignments = Object.fromEntries(PIECE_LABELS.edges.map((label) => [label, assignments[slotByLabel[label].id]]));
             const partialMiddleEdgeMetrics = getPartialUniqueEdgeMetrics(middleEdgeAssignments);
-            if (ep !== 'N/A' && partialMiddleEdgeMetrics) {
-                ep = ep + partialMiddleEdgeMetrics.ep;
-            } else if (partialMiddleEdgeMetrics) {
-                ep = partialMiddleEdgeMetrics.ep;
+            if (wingMetrics && partialMiddleEdgeMetrics) {
+                ep = wingMetrics.ep + partialMiddleEdgeMetrics.ep;
             }
 
             if (allFilled && inventoryValid) {
